@@ -1,5 +1,3 @@
-<%@page import="java.util.List"%>
-<%@page import="com.artstories.web.entity.Notice"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -120,14 +118,14 @@
 				</nav>
 
 
-	<nav class="menu">
-		<h1>협력업체</h1>
-		<ul>
-			<li><a target="_blank" href="http://www.notepubs.com"><img src="/images/notepubs.png" alt="노트펍스" /></a></li>
-			<li><a target="_blank" href="http://www.namoolab.com"><img src="/images/namoolab.png" alt="나무랩연구소" /></a></li>
-						
-		</ul>
-	</nav>
+				<nav class="menu">
+					<h1>협력업체</h1>
+					<ul>
+						<li><a target="_blank" href="http://www.notepubs.com"><img src="/images/notepubs.png" alt="노트펍스" /></a></li>
+						<li><a target="_blank" href="http://www.namoolab.com"><img src="/images/namoolab.png" alt="나무랩연구소" /></a></li>
+									
+					</ul>
+				</nav>
 					
 			</aside>
 			<!-- --------------------------- main --------------------------------------- -->
@@ -198,37 +196,37 @@
 
 			<div class="margin-top align-center pager">	
 		
-	<div>
-		
-		<c:set var="page" value="${empty param.p?1:param.p}"/>
-		<c:set var="startNum" value="${page-(page-1)%5}"/>
-		<c:set var="lastNum" value="23"/>
-		
-		<c:if test="${startNum>1}">
-			<a href="?p=${startNum-1}&t=&q=" class="btn btn-prev">이전</a>
-		</c:if>
-		<c:if test="${startNum<=1}">
-			<span class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</span>
-		</c:if>
-		
-	</div>
+				<div>
+					
+					<c:set var="page" value="${empty param.p?1:param.p}"/>
+					<c:set var="startNum" value="${page-(page-1)%5}"/>
+					<c:set var="lastNum" value="23"/>
+					
+					<c:if test="${startNum>1}">
+						<a href="?p=${startNum-1}&t=&q=" class="btn btn-prev">이전</a>
+					</c:if>
+					<c:if test="${startNum<=1}">
+						<span class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</span>
+					</c:if>
+					
+				</div>
 	
 
 	
-	<ul class="-list- center">
-		<c:forEach var="i" begin="0" end="4">
-		<li><a class="-text- orange bold" href="?p=${startNum+i}&t=&q=" >${startNum+i}</a></li>
-		</c:forEach> 
-				
-	</ul>
-	<div>
-		<c:if test="${startNum+5 < lastNum}">
-			<a href="?p=${startNum+5}&t=&q=" class="btn btn-next">다음</a>
-		</c:if>
-		<c:if test="${startNum+5 >= lastNum }">
-			<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
-		</c:if>
-	</div>
+				<ul class="-list- center">
+					<c:forEach var="i" begin="0" end="4">
+					<li><a class="-text- orange bold" href="?p=${startNum+i}&t=&q=" >${startNum+i}</a></li>
+					</c:forEach> 
+				</ul>
+	
+				<div>
+					<c:if test="${startNum+5 < lastNum}">
+						<a href="?p=${startNum+5}&t=&q=" class="btn btn-next">다음</a>
+					</c:if>
+					<c:if test="${startNum+5 >= lastNum }">
+						<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
+					</c:if>
+				</div>
 	
 			</div>
 		</main>
@@ -238,8 +236,6 @@
 	</div>
 
     <!-- ------------------- <footer> --------------------------------------- -->
-
-
 
         <footer id="footer">
             <div class="content-container">
@@ -271,6 +267,7 @@
                 </div>
             </div>
         </footer>
+        
     </body>
     
-    </html>
+</html>
