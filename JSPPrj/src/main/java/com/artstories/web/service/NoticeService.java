@@ -61,8 +61,8 @@ public class NoticeService {
 			Connection con = DriverManager.getConnection(url, "study", "qwer1234");
 			PreparedStatement st = con.prepareStatement(sql);
 			st.setString(1, "%"+query+"%");
-			st.setInt(2, 1 + (page-1) * 10);
-			st.setInt(3, page*10);
+			st.setInt(2, 0 + ((page - 1) * 10));
+			st.setInt(3, (page * 10));
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()) {
