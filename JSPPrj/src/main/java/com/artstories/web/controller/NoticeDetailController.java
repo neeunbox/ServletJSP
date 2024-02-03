@@ -15,62 +15,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.artstories.web.entity.Notice;
+import com.artstories.web.service.NoticeService;
 
 @WebServlet("/notice/detail")
 public class NoticeDetailController extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		int id = Integer.parseInt(request.getParameter("id"));
-
-		String url = "jdbc:mariadb://localhost:3306/studies";
-		String sql = "SELECT * FROM TB_NOTICE WHERE ID = ?";
-
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			Connection con = DriverManager.getConnection(url, "study", "qwer1234");
-			PreparedStatement st = con.prepareStatement(sql);
-			st.setInt(1, id);
-
-			ResultSet rs = st.executeQuery();
-			
-			rs.next();
-
-			String title = rs.getString("TITLE");
-			String content = rs.getString("CONTENT");
-			int hit = rs.getInt("HIT");
-			String files = rs.getString("FILES");
-			Date regdate = rs.getDate("REGDATE");
-			String writerId = rs.getString("WRITER_ID");
-			
-			
-			Notice notice = new Notice(id, title, content, hit, files, regdate, writerId);
-			
-			request.setAttribute("n", notice);
-			
-			/*
-			request.setAttribute("title", title);
-			request.setAttribute("content", content);
-			request.setAttribute("hit", hit);
-			request.setAttribute("files", files);
-			request.setAttribute("regdate", regdate);
-			request.setAttribute("writerId", writerId);
-			*/
-
-			rs.close();
-			st.close();
-			con.close();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		//redirect
+		NoticeService service = new NoticeService();
+		Notice notice = service.getNotice(id);
+
 		
+		request.setAttribute("n", notice);
 		
 		//forward
 		request.getRequestDispatcher("/WEB-INF/view/notice/detail.jsp").forward(request, response);

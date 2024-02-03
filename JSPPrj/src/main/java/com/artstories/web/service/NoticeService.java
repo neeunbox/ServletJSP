@@ -5,19 +5,19 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.artstories.web.entity.Notice;
+import com.artstories.web.entity.NoticeView;
 
 public class NoticeService {
 	
 	/*
 	 * 공지목록 전체 가져오
 	 **/
-	public List<Notice> getNoticeList() {
+	public List<NoticeView> getNoticeList() {
 		
 		return getNoticeList("title", "", 1);
 		
@@ -26,7 +26,7 @@ public class NoticeService {
 	/*
 	 * 공지목록 특정 페이지 가져오기 
 	 * */
-	public List<Notice> getNoticeList(int page) {
+	public List<NoticeView> getNoticeList(int page) {
 		
 		return getNoticeList("title", "", page);
 		
@@ -35,21 +35,24 @@ public class NoticeService {
 	/*
 	 * 공지목록 조회 조건에 포함되는 특정 페이지 가져오기 
 	 * */
-	public List<Notice> getNoticeList(String field, String query, int page) {
+	public List<NoticeView> getNoticeList(String field, String query, int page) {
 		
-		List<Notice> list = new ArrayList<>();
+		List<NoticeView> list = new ArrayList<>();
+		
+		int rows = 10;
 		
 		String sql = " SELECT ID                         "
 				+    "      , TITLE                      "
-				+    "      , CONTENT                    "
 				+    "      , FILES                      "
 				+    "      , HIT                        "
+				+    "      , CMT_COUNT                  "
 				+    "      , REGDATE                    "
 				+    "      , WRITER_ID                  "
-				+    "   FROM TB_NOTICE                  "
+				+    "   FROM NOTICE_VIEW                "
 				+    "  WHERE 1 = 1                      "
 				+    "    AND " +field+ " LIKE ?         "
 				+    "  ORDER BY REGDATE DESC LIMIT ?, ? ";
+		
 		
 		// 1,  11, 21, 31 -> an = 1 + (page-1) * 10
 		// 10, 20, 30, 40 -> page*10
@@ -62,22 +65,21 @@ public class NoticeService {
 			PreparedStatement st = con.prepareStatement(sql);
 			st.setString(1, "%"+query+"%");
 			st.setInt(2, 0 + ((page - 1) * 10));
-			st.setInt(3, (page * 10));
+			st.setInt(3, rows);
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()) {
 				
 				int id = rs.getInt("ID");
 				String title  = rs.getString("TITLE");
-				String content = rs.getString("CONTENT");
-				int hit = rs.getInt("HIT");
 				String files = rs.getString("FILES");
+				int hit = rs.getInt("HIT");
+				int cmtCount = rs.getInt("CMT_COUNT");
 				Date regdate = rs.getDate("REGDATE");
 				String writerId = rs.getString("WRITER_ID");
 
-				Notice notice = new Notice(id, title, content, hit, files, regdate, writerId);
+				NoticeView notice = new NoticeView(id, title, files, hit, cmtCount, regdate, writerId);
 				
-				// ArrayList에 넣기  
 				list.add(notice);
 			}
 			
@@ -126,7 +128,9 @@ public class NoticeService {
 			st.setString(1, "%"+query+"%");
 			ResultSet rs = st.executeQuery();
 			
-			count = rs.getInt("count");
+			if (rs.next()) {
+				count = rs.getInt("count");
+			}
 			
 			
 			rs.close();
@@ -182,7 +186,7 @@ public class NoticeService {
 				Date regdate = rs.getDate("REGDATE");
 				String writerId = rs.getString("WRITER_ID");
 
-				notice = new Notice(nid, title, content, hit, files, regdate, writerId);
+				notice = new Notice(nid, title, content, files, hit, regdate, writerId);
 			}
 			
 			rs.close();
@@ -237,12 +241,12 @@ public class NoticeService {
 				int nid = rs.getInt("ID");
 				String title  = rs.getString("TITLE");
 				String content = rs.getString("CONTENT");
-				int hit = rs.getInt("HIT");
 				String files = rs.getString("FILES");
+				int hit = rs.getInt("HIT");
 				Date regdate = rs.getDate("REGDATE");
 				String writerId = rs.getString("WRITER_ID");
 
-				notice = new Notice(nid, title, content, hit, files, regdate, writerId);
+				notice = new Notice(nid, title, content, files, hit, regdate, writerId);
 			}
 			
 			rs.close();
@@ -299,12 +303,12 @@ public class NoticeService {
 				int nid = rs.getInt("ID");
 				String title  = rs.getString("TITLE");
 				String content = rs.getString("CONTENT");
-				int hit = rs.getInt("HIT");
 				String files = rs.getString("FILES");
+				int hit = rs.getInt("HIT");
 				Date regdate = rs.getDate("REGDATE");
 				String writerId = rs.getString("WRITER_ID");
 
-				notice = new Notice(nid, title, content, hit, files, regdate, writerId);
+				notice = new Notice(nid, title, content, files, hit, regdate, writerId);
 			}
 			
 			rs.close();

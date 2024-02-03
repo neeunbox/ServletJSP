@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.artstories.web.entity.Notice;
+import com.artstories.web.entity.NoticeView;
 import com.artstories.web.service.NoticeService;
 
 @WebServlet("/notice/list")
@@ -43,15 +43,15 @@ public class NoticeListController extends HttpServlet {
 		}
 		
 		
-			
-				
 		
 		NoticeService service = new NoticeService();
-		List<Notice> list = service.getNoticeList(field, query, page);
+		List<NoticeView> list = service.getNoticeList(field, query, page);
+		int count = service.getNoticeCount(field, query);
 		
 		
 		// 저장소에 넣기 
 		request.setAttribute("list", list);
+		request.setAttribute("count", count);
 		
 		// 전달하기 
 		request.getRequestDispatcher("/WEB-INF/view/notice/list.jsp").forward(request, response);

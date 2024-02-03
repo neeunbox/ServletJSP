@@ -7,24 +7,22 @@ public class Notice {
 	private int id; 
 	private String title;
 	private String content;
-	private int hit;
 	private String files;
+	private int hit;	
 	private Date regdate;
 	private String writerId;
 	
-	// 기본 생성자 
+	
 	public Notice() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	// 오버로드 생성자  
-	public Notice(int id, String title, String content, int hit, String files, Date regdate, String writerId) {
-		
+	public Notice(int id, String title, String content, String files, int hit, Date regdate, String writerId) {
 		this.id = id;
 		this.title = title;
 		this.content = content;
-		this.hit = hit;
 		this.files = files;
+		this.hit = hit;
 		this.regdate = regdate;
 		this.writerId = writerId;
 	}
@@ -53,20 +51,20 @@ public class Notice {
 		this.content = content;
 	}
 
-	public int getHit() {
-		return hit;
-	}
-
-	public void setHit(int hit) {
-		this.hit = hit;
-	}
-
 	public String getFiles() {
 		return files;
 	}
 
 	public void setFiles(String files) {
 		this.files = files;
+	}
+
+	public int getHit() {
+		return hit;
+	}
+
+	public void setHit(int hit) {
+		this.hit = hit;
 	}
 
 	public Date getRegdate() {
@@ -87,8 +85,8 @@ public class Notice {
 
 	@Override
 	public String toString() {
-		return "Notice [id=" + id + ", title=" + title + ", content=" + content + ", hit=" + hit + ", files=" + files
+		return "Notice [id=" + id + ", title=" + title + ", content=" + content + ", files=" + files + ", hit=" + hit
 				+ ", regdate=" + regdate + ", writerId=" + writerId + "]";
 	}
-
+	
 }
