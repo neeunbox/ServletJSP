@@ -1,4 +1,4 @@
-package com.artstories.web.controller;
+package com.artstories.web.controller.admin.notice;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,20 +12,43 @@ import javax.servlet.http.HttpServletResponse;
 import com.artstories.web.entity.NoticeView;
 import com.artstories.web.service.NoticeService;
 
-@WebServlet("/notice/list")
-public class NoticeListController extends HttpServlet {
+@WebServlet("/admin/board/notice/list")
+public class ListController extends HttpServlet {
 	
-
-	private static final long serialVersionUID = 1L;
-
+	// 404
+	// 405
+	// 403
+	
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String[] openIds = request.getParameterValues("open-id");
+		String[] delIds = request.getParameterValues("del-id");
+		String cmd = request.getParameter("cmd");
+		
+		
+		switch (cmd) {
+		case "일괄공개":
+			for (String openId : openIds) {
+				System.out.println("open id : " + openId);
+			}
+			break;
+		case "일괄삭제":
+			for (String delId : delIds) {
+				System.out.println("del id : " + delId);
+			}
+			break;
+		}
+	}
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
-
 		String field_ = request.getParameter("f");
 		String query_ = request.getParameter("q");
-		String page_  = request.getParameter("p");
+		String page_  = request.getParameter("p"); 
+		
 		
 		String field = "title";
 		if (field_ != null && !"".equals(field_)) {
@@ -37,11 +60,11 @@ public class NoticeListController extends HttpServlet {
 			query = query_;
 		}
 		
+		
 		int page = 1;
-		if (page_ != null && !"".equals(page_)) {
+		if (page_ != null && "".equals(page_)) {
 			page = Integer.parseInt(page_);
 		}
-		
 		
 		
 		NoticeService service = new NoticeService();
@@ -49,13 +72,12 @@ public class NoticeListController extends HttpServlet {
 		int count = service.getNoticeCount(field, query);
 		
 		
-		// 저장소에 넣기 
 		request.setAttribute("list", list);
 		request.setAttribute("count", count);
 		
-		// 전달하기 
-		request.getRequestDispatcher("/WEB-INF/view/notice/list.jsp").forward(request, response);
 		
+		//forward
+		request.getRequestDispatcher("/WEB-INF/view/admin/board/notice/list.jsp").forward(request, response);
 	}
 
 }

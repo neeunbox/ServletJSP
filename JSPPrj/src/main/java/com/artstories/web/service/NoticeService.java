@@ -14,6 +14,30 @@ import com.artstories.web.entity.NoticeView;
 
 public class NoticeService {
 	
+	public int removeNoticeAll(int[] ids) {
+		
+		return 0;
+	}
+	
+	
+	public int insertNotice(Notice notice) {
+		
+		return 0;
+	}
+	
+	public int deleteNotice(int id) {
+		return 0;
+	}
+	
+	
+	public int updateNotice(Notice notice) {
+		return 0;
+	}
+	
+	List<Notice> getNoticeNewsList() {
+		return null;
+	}
+	
 	/*
 	 * 공지목록 전체 가져오
 	 **/

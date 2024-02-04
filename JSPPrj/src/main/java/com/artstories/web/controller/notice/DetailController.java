@@ -1,4 +1,4 @@
-package com.artstories.web.controller;
+package com.artstories.web.controller.notice;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -18,7 +18,7 @@ import com.artstories.web.entity.Notice;
 import com.artstories.web.service.NoticeService;
 
 @WebServlet("/notice/detail")
-public class NoticeDetailController extends HttpServlet {
+public class DetailController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
