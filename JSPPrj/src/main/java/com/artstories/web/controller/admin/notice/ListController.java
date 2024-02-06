@@ -51,7 +51,6 @@ public class ListController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
 		String field_ = request.getParameter("f");
 		String query_ = request.getParameter("q");
 		String page_  = request.getParameter("p"); 

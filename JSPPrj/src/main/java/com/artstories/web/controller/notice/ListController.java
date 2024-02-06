@@ -21,8 +21,6 @@ public class ListController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
-
 		String field_ = request.getParameter("f");
 		String query_ = request.getParameter("q");
 		String page_  = request.getParameter("p");
@@ -41,7 +39,6 @@ public class ListController extends HttpServlet {
 		if (page_ != null && !"".equals(page_)) {
 			page = Integer.parseInt(page_);
 		}
-		
 		
 		
 		NoticeService service = new NoticeService();
