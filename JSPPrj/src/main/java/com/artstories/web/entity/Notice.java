@@ -11,13 +11,15 @@ public class Notice {
 	private int hit;	
 	private Date regdate;
 	private String writerId;
+	private boolean pub;
 	
 	
 	public Notice() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Notice(int id, String title, String content, String files, int hit, Date regdate, String writerId) {
+	
+	public Notice(int id, String title, String content, String files, int hit, Date regdate, String writerId, boolean pub) {
 		this.id = id;
 		this.title = title;
 		this.content = content;
@@ -25,7 +27,10 @@ public class Notice {
 		this.hit = hit;
 		this.regdate = regdate;
 		this.writerId = writerId;
+		this.pub = pub;
 	}
+
+
 
 	public int getId() {
 		return id;
@@ -82,11 +87,24 @@ public class Notice {
 	public void setWriterId(String writerId) {
 		this.writerId = writerId;
 	}
+	
+	
+
+	public boolean getPub() {
+		return pub;
+	}
+
+
+	public void setPub(boolean pub) {
+		this.pub = pub;
+	}
+
 
 	@Override
 	public String toString() {
 		return "Notice [id=" + id + ", title=" + title + ", content=" + content + ", files=" + files + ", hit=" + hit
-				+ ", regdate=" + regdate + ", writerId=" + writerId + "]";
+				+ ", regdate=" + regdate + ", writerId=" + writerId + ", pub=" + pub + "]";
 	}
+
 	
 }

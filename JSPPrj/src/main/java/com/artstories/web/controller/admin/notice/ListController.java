@@ -15,6 +15,8 @@ import com.artstories.web.service.NoticeService;
 @WebServlet("/admin/board/notice/list")
 public class ListController extends HttpServlet {
 	
+	private static final long serialVersionUID = 1L;
+
 	// 404
 	// 405
 	// 403
@@ -26,7 +28,6 @@ public class ListController extends HttpServlet {
 		String[] delIds = request.getParameterValues("del-id");
 		String cmd = request.getParameter("cmd");
 		
-		
 		switch (cmd) {
 		case "일괄공개":
 			for (String openId : openIds) {
@@ -34,9 +35,15 @@ public class ListController extends HttpServlet {
 			}
 			break;
 		case "일괄삭제":
-			for (String delId : delIds) {
-				System.out.println("del id : " + delId);
+			NoticeService service = new NoticeService();
+
+			int[] ids = new int[delIds.length];
+			for (int i = 0; i < ids.length; i++) {
+				ids[i] = Integer.parseInt(delIds[i]);
 			}
+			
+			int result = service.deleteNOticeAll(ids);
+			
 			break;
 		}
 	}

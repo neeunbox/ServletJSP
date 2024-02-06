@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +23,35 @@ public class NoticeService {
 	
 	public int insertNotice(Notice notice) {
 		
-		return 0;
+		int result = 0;
+		
+		
+		String sql = "INSERT INTO TB_NOTICE(TITLE, CONTENT, WRITER_ID, PUB) VALUES (?, ?, ?, ?)";
+		
+		String url = "jdbc:mariadb://localhost:3306/studies";
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url, "study", "qwer1234");
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setString(1, notice.getTitle());
+			st.setString(2, notice.getContent());
+			st.setString(3, notice.getWriterId());
+			st.setBoolean(4, notice.getPub());
+			
+			result = st.executeUpdate();
+			
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 	
 	public int deleteNotice(int id) {
@@ -70,6 +99,7 @@ public class NoticeService {
 				+    "      , FILES                      "
 				+    "      , HIT                        "
 				+    "      , CMT_COUNT                  "
+				+    "      , PUB                        "
 				+    "      , REGDATE                    "
 				+    "      , WRITER_ID                  "
 				+    "   FROM NOTICE_VIEW                "
@@ -101,8 +131,9 @@ public class NoticeService {
 				int cmtCount = rs.getInt("CMT_COUNT");
 				Date regdate = rs.getDate("REGDATE");
 				String writerId = rs.getString("WRITER_ID");
+				boolean pub = rs.getBoolean("PUB");
 
-				NoticeView notice = new NoticeView(id, title, files, hit, cmtCount, regdate, writerId);
+				NoticeView notice = new NoticeView(id, title, files, hit, cmtCount, regdate, writerId, pub);
 				
 				list.add(notice);
 			}
@@ -210,7 +241,7 @@ public class NoticeService {
 				Date regdate = rs.getDate("REGDATE");
 				String writerId = rs.getString("WRITER_ID");
 
-				notice = new Notice(nid, title, content, files, hit, regdate, writerId);
+				notice = new Notice(nid, title, content, files, hit, regdate, writerId, false);
 			}
 			
 			rs.close();
@@ -269,8 +300,9 @@ public class NoticeService {
 				int hit = rs.getInt("HIT");
 				Date regdate = rs.getDate("REGDATE");
 				String writerId = rs.getString("WRITER_ID");
+				Boolean pub = rs.getBoolean("PUB");
 
-				notice = new Notice(nid, title, content, files, hit, regdate, writerId);
+				notice = new Notice(nid, title, content, files, hit, regdate, writerId, pub);
 			}
 			
 			rs.close();
@@ -331,8 +363,9 @@ public class NoticeService {
 				int hit = rs.getInt("HIT");
 				Date regdate = rs.getDate("REGDATE");
 				String writerId = rs.getString("WRITER_ID");
+				Boolean pub = rs.getBoolean("PUB");
 
-				notice = new Notice(nid, title, content, files, hit, regdate, writerId);
+				notice = new Notice(nid, title, content, files, hit, regdate, writerId, pub);
 			}
 			
 			rs.close();
@@ -348,6 +381,48 @@ public class NoticeService {
 		
 		return notice;
 		
+	}
+
+
+	/*
+	 * 다건 삭제 처리 
+	 **/
+	public int deleteNOticeAll(int[] ids) {
+		
+		int result = 0;
+		
+		// 1, 2, 3 콤마 추가 
+		String params = "";
+		for (int i = 0; i < ids.length; i++) {
+			params += ids[i];
+			
+			if (i < (ids.length - 1)) {
+				params += ",";
+			}
+		}
+		
+		String sql = "DELETE NOTICE WHERE ID IN(" +params+ ")";
+		
+		String url = "jdbc:mariadb://localhost:3306/studies";
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url, "study", "qwer1234");
+			Statement st = con.createStatement();
+			result = st.executeUpdate(sql);
+			
+ 
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
 }
