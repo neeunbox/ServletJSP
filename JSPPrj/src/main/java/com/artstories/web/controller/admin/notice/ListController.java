@@ -68,7 +68,7 @@ public class ListController extends HttpServlet {
 		
 		
 		int page = 1;
-		if (page_ != null && "".equals(page_)) {
+		if (page_ != null && !"".equals(page_)) {
 			page = Integer.parseInt(page_);
 		}
 		

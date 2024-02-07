@@ -220,7 +220,7 @@
 					<ul class="-list- center">
 						<c:forEach  var="i" begin="0" end="4" >
 						<c:if test="${(startNum+i) <= lastNum}">
-						<li><a class="-text- ${(startNum+i)==page?'orange':'' } bold" href="detail?p=${startNum+i}&f=${param.f}&q=${param.q}">${startNum+i}</a></li>
+						<li><a class="-text- ${(page==(startNum+i))?'orange':''} bold" href="?p=${startNum+i}&f=${param.f}&q=${param.q}">${startNum+i}</a></li>
 						</c:if>
 						</c:forEach>
 					</ul>

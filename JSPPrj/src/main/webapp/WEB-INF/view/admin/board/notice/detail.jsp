@@ -161,13 +161,13 @@
                             </tr>
                             <tr>
                                 <th>작성일</th>
-                                <td class="text-align-left text-indent" colspan="3">${n.regdate}</td>
+                                <td class="text-align-left text-indent" colspan="3"><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${n.regdate }"/></td>
                             </tr>
                             <tr>
                                 <th>작성자</th>
                                 <td>${n.writerId}</td>
                                 <th>조회수</th>
-                                <td>${n.hit}</td>
+                                <td><fmt:formatNumber pattern="#,###" value="${n.hit}"/></td>
                             </tr>
                             <tr>
                                 <th>첨부파일</th>
