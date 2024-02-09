@@ -126,7 +126,7 @@
                 <nav class="menu text-menu">
                     <h1>알림관리</h1>
                     <ul>
-                        <li><a href="/admin/board/notice/list.html">공지사항</a></li>
+                        <li><a href="/admin/board/notice/list">공지사항</a></li>
                     </ul>
                 </nav>
 
@@ -161,9 +161,12 @@
                                 </tr>
                                 <tr>
                                     <th>첨부파일</th>
-                                    <td colspan="3" class="text-align-left text-indent"><input type="file"
-                                            name="file" /> </td>
+                                    <td colspan="3" class="text-align-left text-indent"><input type="file" name="file" /> </td>
                                 </tr>
+                                <tr>
+                                    <th>첨부파일</th>
+                                    <td colspan="3" class="text-align-left text-indent"><input type="file" name="file" /> </td>
+                                </tr>                                
                                 <tr class="content">
                                     <td colspan="4"><textarea class="content" name="content"></textarea></td>
                                 </tr>

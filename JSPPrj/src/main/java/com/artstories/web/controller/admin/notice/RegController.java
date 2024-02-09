@@ -1,6 +1,11 @@
 package com.artstories.web.controller.admin.notice;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -37,35 +42,66 @@ public class RegController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String title = request.getParameter("title");
-		
-		System.out.println("title");
-		System.out.println(title);
-		
 		String content = request.getParameter("content");
 		String isOpen = request.getParameter("open");
 		
-		Part filePart = request.getPart("file");
-		filePart.getInputStream();
-		
-		String realPath = request.getServletContext().getRealPath("/upload");
-		System.out.println(realPath);
-		
-		
+		// pub
 		boolean pub = false;
-		
 		if (isOpen != null) {
 			pub = true;
 		}
+		
+		//files
+		Collection<Part> parts = request.getParts();
+		StringBuilder builder = new StringBuilder();
+		
+		for (Part part : parts) {
+			// 파일 체크, 첨부 없는지 체크 
+			if(!part.getName().equals("file")) continue;
+			if(part.getSize() == 0) continue;
+			
+			Part filePart = part;
+			String fileName = filePart.getSubmittedFileName();
+			builder.append(fileName);
+			builder.append(",");
+			
+			InputStream fis = filePart.getInputStream();
+			
+			String realPath = request.getServletContext().getRealPath("/upload");
+			System.out.println(realPath);
+			
+			File path = new File(realPath);
+			if(!path.exists()) {
+				path.mkdirs();
+			}
+			
+			// 같은 파일이이 있을 경우 파일명(1) 처리를 해야 한다.
+			String filePath = realPath + File.separator + fileName;
+			FileOutputStream fos = new FileOutputStream(filePath);
+			
+			
+			byte[] buf = new byte[1024];
+			int size = 0;
+			while((size=fis.read(buf)) != -1) {
+				fos.write(buf,0,size);
+			}
+			
+			fos.close();
+			fis.close();
+		}
+		// file name last ',' remove
+		builder.delete(builder.length()-1, builder.length());
 		
 		
 		Notice notice = new Notice();
 		notice.setTitle(title);
 		notice.setContent(content);
+		notice.setFiles(builder.toString());
 		notice.setPub(pub);
 		notice.setWriterId("study");
 		
 		NoticeService service = new NoticeService();
-		//int result = service.insertNotice(notice);
+		int result = service.insertNotice(notice);
 				
 		
 		response.sendRedirect("list");

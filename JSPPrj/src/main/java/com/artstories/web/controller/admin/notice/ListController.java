@@ -1,6 +1,9 @@
 package com.artstories.web.controller.admin.notice;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -24,28 +27,55 @@ public class ListController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String[] openIds = request.getParameterValues("open-id");
+		String[] openIds = request.getParameterValues("open-id"); // 3,5,8
 		String[] delIds = request.getParameterValues("del-id");
 		String cmd = request.getParameter("cmd");
+	    String ids_ = request.getParameter("ids");
+	    String[] ids = ids_.trim().split(" "); // 1 2 3 4 5 6 7 8 9 10
+
+	    NoticeService service = new NoticeService();
 		
 		switch (cmd) {
 		case "일괄공개":
 			for (String openId : openIds) {
 				System.out.println("open id : " + openId);
 			}
+			
+			// 배열 List 변환 
+			List<String> oids = Arrays.asList(openIds);
+			// 1,2,3,4,5,6,7,8,9,10 - //3,5,8
+			// 1,2,4,6,7,9,10
+			List<String> cids = new ArrayList(Arrays.asList(ids));
+			cids.removeAll(oids);
+			System.out.println(Arrays.asList(ids));
+			System.out.println(oids);
+			System.out.println(cids);
+			
+			for (int i = 0; i < ids.length; i++) {
+				//1.현재 id open 된 상태냐?
+				if(oids.contains(ids[i])) {
+					//pub -> 1;
+				} else {
+					//pub -> 0;
+				}
+			}
+				
+			//service.openNoticeList(opnIds);
+			//service.closeNoticeList(clsIds);
+			
 			break;
 		case "일괄삭제":
-			NoticeService service = new NoticeService();
 
-			int[] ids = new int[delIds.length];
-			for (int i = 0; i < ids.length; i++) {
-				ids[i] = Integer.parseInt(delIds[i]);
+			int[] idDels = new int[delIds.length];
+			for (int i = 0; i < delIds.length; i++) {
+				idDels[i] = Integer.parseInt(delIds[i]);
 			}
-			
-			int result = service.deleteNOticeAll(ids);
+			int result = service.deleteNOticeAll(idDels);
 			
 			break;
 		}
+		
+		response.sendRedirect("list");
 	}
 	
 	@Override

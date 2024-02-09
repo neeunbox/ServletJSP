@@ -26,7 +26,7 @@ public class NoticeService {
 		int result = 0;
 		
 		
-		String sql = "INSERT INTO TB_NOTICE(TITLE, CONTENT, WRITER_ID, PUB) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO TB_NOTICE(TITLE, CONTENT, FILES, WRITER_ID, PUB) VALUES (?, ?, ?, ?, ?)";
 		
 		String url = "jdbc:mariadb://localhost:3306/studies";
 		
@@ -36,8 +36,9 @@ public class NoticeService {
 			PreparedStatement st = con.prepareStatement(sql);
 			st.setString(1, notice.getTitle());
 			st.setString(2, notice.getContent());
-			st.setString(3, notice.getWriterId());
-			st.setBoolean(4, notice.getPub());
+			st.setString(3, notice.getFiles());
+			st.setString(4, notice.getWriterId());
+			st.setBoolean(5, notice.getPub());
 			
 			result = st.executeUpdate();
 			
@@ -151,6 +152,73 @@ public class NoticeService {
 	
 		return list;
 	
+	}
+	
+	/*
+	 * 공개 자료만 조회 
+	 * */
+	public List<NoticeView> getNoticePubList(String field, String query, int page) {
+		List<NoticeView> list = new ArrayList<>();
+		
+		int rows = 10;
+		
+		String sql = " SELECT ID                         "
+				+    "      , TITLE                      "
+				+    "      , FILES                      "
+				+    "      , HIT                        "
+				+    "      , CMT_COUNT                  "
+				+    "      , PUB                        "
+				+    "      , REGDATE                    "
+				+    "      , WRITER_ID                  "
+				+    "   FROM NOTICE_VIEW                "
+				+    "  WHERE 1 = 1                      "
+				+    "    AND " +field+ " LIKE ?         "
+				+    "    AND PUB = 1                    "
+				+    "  ORDER BY REGDATE DESC LIMIT ?, ? ";
+		
+		
+		// 1,  11, 21, 31 -> an = 1 + (page-1) * 10
+		// 10, 20, 30, 40 -> page*10
+		
+		String url = "jdbc:mariadb://localhost:3306/studies";
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url, "study", "qwer1234");
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setString(1, "%"+query+"%");
+			st.setInt(2, 0 + ((page - 1) * 10));
+			st.setInt(3, rows);
+			ResultSet rs = st.executeQuery();
+			
+			while(rs.next()) {
+				
+				int id = rs.getInt("ID");
+				String title  = rs.getString("TITLE");
+				String files = rs.getString("FILES");
+				int hit = rs.getInt("HIT");
+				int cmtCount = rs.getInt("CMT_COUNT");
+				Date regdate = rs.getDate("REGDATE");
+				String writerId = rs.getString("WRITER_ID");
+				boolean pub = rs.getBoolean("PUB");
+
+				NoticeView notice = new NoticeView(id, title, files, hit, cmtCount, regdate, writerId, pub);
+				
+				list.add(notice);
+			}
+			
+			rs.close();
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		return list;
 	}
 	
 	/*
@@ -401,7 +469,7 @@ public class NoticeService {
 			}
 		}
 		
-		String sql = "DELETE NOTICE WHERE ID IN(" +params+ ")";
+		String sql = "DELETE FROM TB_NOTICE WHERE ID IN (" +params+ ")";
 		
 		String url = "jdbc:mariadb://localhost:3306/studies";
 		
@@ -426,4 +494,5 @@ public class NoticeService {
 	}
 
 }
+
 
