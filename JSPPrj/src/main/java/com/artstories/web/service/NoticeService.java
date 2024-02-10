@@ -21,6 +21,71 @@ public class NoticeService {
 	}
 	
 	
+	// 정수형 배열 처리
+	public int pubNoticeAll(int[] oids, int[] cids) {
+		
+		List<String> oidsList = new ArrayList<>();
+		for (int i = 0; i<oids.length; i++) {
+			oidsList.add(String.valueOf(oids[i]));
+		}
+		
+		List<String> cidsList = new ArrayList<>();
+		for (int i = 0; i<cids.length; i++) {
+			cidsList.add(String.valueOf(cids[i]));
+		}
+		
+		return pubNoticeAll(oidsList, cidsList);
+	}
+
+	// List 처리
+	public int pubNoticeAll(List<String> oids, List<String> cids) {
+		
+		String oidsCSV = String.join(",", oids);
+		String cidsCSV = String.join(",", cids);
+		
+		return pubNoticeAll(oidsCSV, cidsCSV);
+	}
+	
+	
+	// String 처리 20,30,43,56
+	public int pubNoticeAll(String oidsCSV, String cidsCSV) {
+		
+		int result = 0;
+
+		//String sqlOpen  = "UPDATE TB_NOTICE SET PUB=1 WHERE ID IN ("+oidsCSV+")";
+		//String sqlClose = "UPDATE TB_NOTICE SET PUB=0 WHERE ID IN ("+cidsCSV+")";
+		
+		String sqlOpen  = String.format("UPDATE TB_NOTICE SET PUB=1 WHERE ID IN (%s)", oidsCSV);
+		String sqlClose = String.format("UPDATE TB_NOTICE SET PUB=0 WHERE ID IN (%s)", cidsCSV);
+		
+		String url = "jdbc:mariadb://localhost:3306/studies";
+		
+		
+		// Transaction 처리 없음 
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url, "study", "qwer1234");
+			Statement stOpen = con.createStatement();
+			result += stOpen.executeUpdate(sqlOpen);
+			
+			Statement stClose = con.createStatement();
+			result += stClose.executeUpdate(sqlClose);
+			
+			stOpen.close();
+			stClose.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	
 	public int insertNotice(Notice notice) {
 		
 		int result = 0;

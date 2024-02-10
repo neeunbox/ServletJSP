@@ -3,7 +3,6 @@ package com.artstories.web.controller.admin.notice;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -41,27 +40,18 @@ public class ListController extends HttpServlet {
 				System.out.println("open id : " + openId);
 			}
 			
-			// 배열 List 변환 
+			// 배열 값을 List 로  변환 
 			List<String> oids = Arrays.asList(openIds);
 			// 1,2,3,4,5,6,7,8,9,10 - //3,5,8
 			// 1,2,4,6,7,9,10
-			List<String> cids = new ArrayList(Arrays.asList(ids));
+			List<String> cids = new ArrayList<String>(Arrays.asList(ids));
 			cids.removeAll(oids);
 			System.out.println(Arrays.asList(ids));
 			System.out.println(oids);
 			System.out.println(cids);
 			
-			for (int i = 0; i < ids.length; i++) {
-				//1.현재 id open 된 상태냐?
-				if(oids.contains(ids[i])) {
-					//pub -> 1;
-				} else {
-					//pub -> 0;
-				}
-			}
-				
-			//service.openNoticeList(opnIds);
-			//service.closeNoticeList(clsIds);
+			// Transaction 
+			service.pubNoticeAll(oids, cids);
 			
 			break;
 		case "일괄삭제":
